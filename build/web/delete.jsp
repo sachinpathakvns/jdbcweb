@@ -1,9 +1,4 @@
-<%-- 
-    Document   : insert
-    Created on : 20 Apr, 2022, 11:34:54 AM
-    Author     : sachin
---%>
- 
+
 <%@page import="dataconnect.DBConfig"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -19,12 +14,8 @@ if(ispostback)
     physics=request.getParameter("physics");
     chemistry=request.getParameter("chemistry");
     math =request.getParameter("math ");
-    PreparedStatement statement=DBConfig.connect().prepareStatement("insert into student values(?,?,?,?,?)");
+    PreparedStatement statement=DBConfig.connect().prepareStatement("delete from student where rollno=?");
     statement.setString(1, rollno);
-    statement.setString(2, name);
-    statement.setString(3, physics);
-    statement.setString(4, chemistry);
-    statement.setString(5, math);
     statement.executeUpdate();
     result="Successfull";
     }
@@ -108,15 +99,7 @@ if(ispostback)
         <div class="col-md-6">
           <form>
             <input type="hidden" name="check" />
-            rollno<input type="number" name="rollno" value="<%=rollno%>" />
-            <br />
-            Name<input type="text" name="name" value="" />
-            <br />
-            physics<input type="number" name="math" value="<%=physics%>" />
-            <br />
-            Chemistry<input type="number" name="math" value="<%=chemistry%>" />
-            <br />
-            Math<input type="number" name="math" value="<%=math%>" />
+            Delete<input type="number" name="rollno" value="<%=rollno%>" />
             <br />
             <input type="submit" value="Insert" />
           </form>

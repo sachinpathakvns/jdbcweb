@@ -3,10 +3,11 @@ package org.apache.jsp;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
+import java.sql.ResultSet;
 import dataconnect.DBConfig;
 import java.sql.PreparedStatement;
 
-public final class update_jsp extends org.apache.jasper.runtime.HttpJspBase
+public final class select_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
 
   private static final JspFactory _jspxFactory = JspFactory.getDefaultFactory();
@@ -47,26 +48,34 @@ public final class update_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("\n");
       out.write("\n");
       out.write("\n");
+      out.write("\n");
 
 boolean ispostback=(request.getParameter("check")==null)?false:true;
-String rollno="",name="",physics="",chemistry="",math="",result="Update your  account";
+String rollno="",name="",physics="",chemistry="",math ="",result="Your Data";
 if(ispostback)
 {
     try
-     {
+    {
     rollno=request.getParameter("rollno");
     name=request.getParameter("name");
     physics=request.getParameter("physics");
     chemistry=request.getParameter("chemistry");
-    math =request.getParameter("math");
-    PreparedStatement statement=DBConfig.connect().prepareStatement("update student set name=?,physics=?,chemistry=?,math=? where rollno=?");
-    statement.setString(1, name);
-    statement.setString(2, physics);
-    statement.setString(3, chemistry);
-    statement.setString(4, math);
-    statement.setString(5, rollno);
-    statement.executeUpdate();
-    result="Successfull";
+    math =request.getParameter("math ");
+    PreparedStatement statement=DBConfig.connect().prepareStatement("select * from  student where rollno=?");
+    statement.setString(1, rollno);
+   ResultSet rs= statement.executeQuery();
+   if(rs.next())
+   {
+       name="" + rs.getObject("name");
+       physics="" + rs.getObject("physics");
+       chemistry="" + rs.getObject("chemistry");
+       math ="" + rs.getObject("math");
+       result="Found";
+   }
+   else
+   {
+    result="Not found";
+   }
     }
     catch(Exception ex)
     {
@@ -176,8 +185,6 @@ if(ispostback)
       out.write("    ></script>\n");
       out.write("  </body>\n");
       out.write("</html>\n");
-      out.write("\n");
-      out.write(" ");
     } catch (Throwable t) {
       if (!(t instanceof SkipPageException)){
         out = _jspx_out;

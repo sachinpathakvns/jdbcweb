@@ -6,7 +6,7 @@ import javax.servlet.jsp.*;
 import dataconnect.DBConfig;
 import java.sql.PreparedStatement;
 
-public final class update_jsp extends org.apache.jasper.runtime.HttpJspBase
+public final class delete_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
 
   private static final JspFactory _jspxFactory = JspFactory.getDefaultFactory();
@@ -49,22 +49,18 @@ public final class update_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("\n");
 
 boolean ispostback=(request.getParameter("check")==null)?false:true;
-String rollno="",name="",physics="",chemistry="",math="",result="Update your  account";
+String rollno="",name="",physics="",chemistry="",math="",result="Create your  account";
 if(ispostback)
 {
     try
-     {
+    {
     rollno=request.getParameter("rollno");
     name=request.getParameter("name");
     physics=request.getParameter("physics");
     chemistry=request.getParameter("chemistry");
-    math =request.getParameter("math");
-    PreparedStatement statement=DBConfig.connect().prepareStatement("update student set name=?,physics=?,chemistry=?,math=? where rollno=?");
-    statement.setString(1, name);
-    statement.setString(2, physics);
-    statement.setString(3, chemistry);
-    statement.setString(4, math);
-    statement.setString(5, rollno);
+    math =request.getParameter("math ");
+    PreparedStatement statement=DBConfig.connect().prepareStatement("delete from student where rollno=?");
+    statement.setString(1, rollno);
     statement.executeUpdate();
     result="Successfull";
     }
@@ -79,6 +75,11 @@ if(ispostback)
       out.write("<!DOCTYPE html>\n");
       out.write("<html lang=\"en\">\n");
       out.write("  <head>\n");
+      out.write("    <style>\n");
+      out.write("      nav {\n");
+      out.write("        font-size: 24px;\n");
+      out.write("      }\n");
+      out.write("    </style>\n");
       out.write("    <!-- Required meta tags -->\n");
       out.write("    <meta charset=\"utf-8\" />\n");
       out.write("    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n");
@@ -137,29 +138,15 @@ if(ispostback)
       out.write("  <body>\n");
       out.write("    <div class=\"container-fluid\">\n");
       out.write("      <div class=\"row\">\n");
-      out.write("        <div class=\"col-md-12\"></div>\n");
+      out.write("        <div class=\"col-md-12\">Menu</div>\n");
       out.write("      </div>\n");
       out.write("\n");
       out.write("      <div class=\"row\">\n");
       out.write("        <div class=\"col-md-6\">\n");
       out.write("          <form>\n");
       out.write("            <input type=\"hidden\" name=\"check\" />\n");
-      out.write("            rollno<input type=\"number\" name=\"rollno\" value=\"");
+      out.write("            Delete<input type=\"number\" name=\"rollno\" value=\"");
       out.print(rollno);
-      out.write("\" />\n");
-      out.write("            <br />\n");
-      out.write("            Name<input type=\"text\" name=\"name\" value=\"\" />\n");
-      out.write("            <br />\n");
-      out.write("            physics<input type=\"number\" name=\"math\" value=\"");
-      out.print(physics);
-      out.write("\" />\n");
-      out.write("            <br />\n");
-      out.write("            Chemistry<input type=\"number\" name=\"math\" value=\"");
-      out.print(chemistry);
-      out.write("\" />\n");
-      out.write("            <br />\n");
-      out.write("            Math<input type=\"number\" name=\"math\" value=\"");
-      out.print(math);
       out.write("\" />\n");
       out.write("            <br />\n");
       out.write("            <input type=\"submit\" value=\"Insert\" />\n");
@@ -176,8 +163,6 @@ if(ispostback)
       out.write("    ></script>\n");
       out.write("  </body>\n");
       out.write("</html>\n");
-      out.write("\n");
-      out.write(" ");
     } catch (Throwable t) {
       if (!(t instanceof SkipPageException)){
         out = _jspx_out;

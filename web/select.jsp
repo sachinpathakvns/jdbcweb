@@ -1,15 +1,11 @@
-<%-- 
-    Document   : insert
-    Created on : 20 Apr, 2022, 11:34:54 AM
-    Author     : sachin
---%>
- 
+
+<%@page import="java.sql.ResultSet"%>
 <%@page import="dataconnect.DBConfig"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
 boolean ispostback=(request.getParameter("check")==null)?false:true;
-String rollno="",name="",physics="",chemistry="",math="",result="Create your  account";
+String rollno="",name="",physics="",chemistry="",math ="",result="Your Data";
 if(ispostback)
 {
     try
@@ -19,14 +15,21 @@ if(ispostback)
     physics=request.getParameter("physics");
     chemistry=request.getParameter("chemistry");
     math =request.getParameter("math ");
-    PreparedStatement statement=DBConfig.connect().prepareStatement("insert into student values(?,?,?,?,?)");
+    PreparedStatement statement=DBConfig.connect().prepareStatement("select * from  student where rollno=?");
     statement.setString(1, rollno);
-    statement.setString(2, name);
-    statement.setString(3, physics);
-    statement.setString(4, chemistry);
-    statement.setString(5, math);
-    statement.executeUpdate();
-    result="Successfull";
+   ResultSet rs= statement.executeQuery();
+   if(rs.next())
+   {
+       name="" + rs.getObject("name");
+       physics="" + rs.getObject("physics");
+       chemistry="" + rs.getObject("chemistry");
+       math ="" + rs.getObject("math");
+       result="Found";
+   }
+   else
+   {
+    result="Not found";
+   }
     }
     catch(Exception ex)
     {
@@ -38,11 +41,6 @@ if(ispostback)
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <style>
-      nav {
-        font-size: 24px;
-      }
-    </style>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -101,7 +99,7 @@ if(ispostback)
   <body>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-12">Menu</div>
+        <div class="col-md-12"></div>
       </div>
 
       <div class="row">
@@ -110,7 +108,7 @@ if(ispostback)
             <input type="hidden" name="check" />
             rollno<input type="number" name="rollno" value="<%=rollno%>" />
             <br />
-            Name<input type="text" name="name" value="" />
+            Name<input type="text" name="name" value="<%=name%>" />
             <br />
             physics<input type="number" name="math" value="<%=physics%>" />
             <br />
